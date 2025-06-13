@@ -1,0 +1,33 @@
+#Using Jenkins Shared Library Concept Pipeline has written!!
+@Library('shared') _
+pipeline{
+    agent{
+        label 'slave'
+    }
+    stages{
+        stage('Git Checkout'){
+            steps{
+                script{
+                    code_checkout('https://github.com/abhiteshkulkarni/java-project-maven-new.git','master')
+                }
+                    echo 'Successfully clone the git repo!!'
+            }
+        }
+        stage('Build Code'){
+            steps{
+                script{
+                    docker_build('java-app','latest','abhitesh003')
+                }
+                echo 'Build happen succefully'
+            }
+        }
+        stage('Push Docker Hub'){
+            steps{
+                script{
+                    docker_push('java-app','latest','abhitesh003/myrepo')
+                }
+                echo 'Successfully Image Pushed to Docker Hub!!'
+            }
+        }
+    }
+}
